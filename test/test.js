@@ -20,8 +20,8 @@ async function getAuthenticatedTestClient() {
     if (! authenticatedTestClient) {
         authenticatedTestClient = new SDKClient('http://localhost:3000');
 
-        const username = 'gian_bine@hotmail.com';
-        const password = 'gian6280';
+        const username = 'teste@teste.com';
+        const password = 'teste';
 
         const auth = await authenticatedTestClient.authenticate({
             username,
@@ -78,8 +78,8 @@ describe('Api Responses', function() {
             it('should return token', async function() {
                 const client = await getUnauthenticatedTestClient();
 
-                const username = 'gian_bine@hotmail.com';
-                const password = 'gian6280';
+                const username = 'teste@teste.com';
+                const password = 'test';
 
                 const response = await client.authenticate({
                     username,
