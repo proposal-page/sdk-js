@@ -1,0 +1,36 @@
+{
+  "name": "@proposal-page/proposal-page-sdk",
+  "version": "0.1.0",
+  "description": "This module is a open source project with the goal of making the task of consuming the Proposal Page API easy and straight-forward",
+  "main": "bin/index.js",
+  "license": "MIT",
+  "dependencies": {
+    "api-wrapper": "^1.1.0",
+    "bluebird": "^3.5.3"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-json-pattern": "^1.1.0",
+    "mocha": "^6.0.2",
+    "sinon": "^7.3.2",
+    "sinon-mongoose": "^2.3.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "bin": {
+    "proposal-page-sdk": "index.js"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/proposal-page/sdk-js.git"
+  },
+  "author": "Gianluca Bine",
+  "bugs": {
+    "url": "https://github.com/proposal-page/sdk-js/issues"
+  },
+  "homepage": "https://github.com/proposal-page/sdk-js#readme"
+}
