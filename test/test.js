@@ -10,14 +10,14 @@ chai.use(jsonPattern.default);
 var authenticatedTestClient = null;
 var unauthenticatedTestClient = null;
 async function getUnauthenticatedTestClient() {
-    if (! unauthenticatedTestClient) {
+    if (!unauthenticatedTestClient) {
         unauthenticatedTestClient = new SDKClient('http://localhost:3000');
     }
 
     return unauthenticatedTestClient;
 }
 async function getAuthenticatedTestClient() {
-    if (! authenticatedTestClient) {
+    if (!authenticatedTestClient) {
         authenticatedTestClient = new SDKClient('http://localhost:3000');
 
         const username = 'teste@teste.com';
@@ -25,7 +25,7 @@ async function getAuthenticatedTestClient() {
 
         const auth = await authenticatedTestClient.authenticate({
             username,
-            password
+            password,
         });
 
         authenticatedTestClient.token = JSON.parse(auth.body).token;
@@ -83,7 +83,7 @@ describe('Api Responses', function() {
 
                 const response = await client.authenticate({
                     username,
-                    password
+                    password,
                 });
 
                 expect(response.statusCode).to.equal(200);
@@ -110,11 +110,11 @@ describe('Api Responses', function() {
         var testProjectId = null;
 
         describe('Create', function() {
-            it('should create and return a project', async function () {
+            it('should create and return a project', async function() {
                 const client = await getAuthenticatedTestClient();
                 const response = await client.createProject({
                     title: 'New Project',
-                    blocks: []
+                    blocks: [],
                 });
 
                 const responseBody = JSON.parse(response.body);
@@ -147,7 +147,7 @@ describe('Api Responses', function() {
         });
 
         describe('List', function() {
-            it('should list user projects paginated', async function () {
+            it('should list user projects paginated', async function() {
                 const client = await getAuthenticatedTestClient();
                 const response = await client.listProjects();
 
@@ -190,7 +190,7 @@ describe('Api Responses', function() {
         });
 
         describe('Retrieve', function() {
-            it('should retrieve a existing project', async function () {
+            it('should retrieve a existing project', async function() {
                 const client = await getAuthenticatedTestClient();
                 const response = await client.listProject(testProjectId);
 
@@ -220,10 +220,10 @@ describe('Api Responses', function() {
         });
 
         describe('Update', function() {
-            it('should update a existing project', async function () {
+            it('should update a existing project', async function() {
                 const client = await getAuthenticatedTestClient();
                 const response = await client.updateProject(testProjectId, {
-                    title: 'Updated Project Title'
+                    title: 'Updated Project Title',
                 });
 
                 const responseBody = JSON.parse(response.body);
@@ -286,7 +286,7 @@ describe('Api Responses', function() {
         });
 
         describe('Password', function() {
-            it('should set project password', async function () {
+            it('should set project password', async function() {
                 const client = await getAuthenticatedTestClient();
                 const response = await client.setProjectPassword(testProjectId, 'password');
 
@@ -316,19 +316,25 @@ describe('Api Responses', function() {
                 expect(responseBody.password).to.equal('password');
             });
 
-            it('should check project password', async function () {
+            it('should check project password', async function() {
                 const client = await getUnauthenticatedTestClient();
 
-                const correctPasswordResponse = await client.checkProjectPassword(testProjectId, 'password');
+                const correctPasswordResponse = await client.checkProjectPassword(
+                    testProjectId,
+                    'password'
+                );
                 expect(correctPasswordResponse.statusCode).to.equal(200);
 
-                const incorrectPasswordResponse = await client.checkProjectPassword(testProjectId, 'password1');
+                const incorrectPasswordResponse = await client.checkProjectPassword(
+                    testProjectId,
+                    'password1'
+                );
                 expect(incorrectPasswordResponse.statusCode).to.equal(401);
             });
         });
 
         describe('Publish', function() {
-            it('should set project publish to true', async function () {
+            it('should set project publish to true', async function() {
                 const client = await getAuthenticatedTestClient();
                 const response = await client.publishProject(testProjectId);
 
@@ -360,7 +366,7 @@ describe('Api Responses', function() {
         });
 
         describe('Secure', function() {
-            it('should set project secure to true', async function () {
+            it('should set project secure to true', async function() {
                 const client = await getAuthenticatedTestClient();
                 const response = await client.secureProject(testProjectId);
 
@@ -388,20 +394,20 @@ describe('Api Responses', function() {
                     "password"?: String,
                 }`);
                 expect(responseBody.secure).to.equal(true);
-            })
+            });
         });
 
         describe('Cover', function() {
-            it('should generate project cover', async function () {
+            it('should generate project cover', async function() {
                 const client = await getAuthenticatedTestClient();
                 const response = await client.generateProjectCover(testProjectId);
 
                 expect(response.statusCode).to.equal(200);
-            })
+            });
         });
 
         describe('Copy', function() {
-            it('should generate project based on a default template', async function () {
+            it('should generate project based on a default template', async function() {
                 const templateId = '5cb47ec98497e9001ad9a1b2';
                 const client = await getAuthenticatedTestClient();
                 const response = await client.createProjectFromTemplate(templateId);
@@ -429,7 +435,7 @@ describe('Api Responses', function() {
                     "__v": Number,
                     "password"?: any,
                 }`);
-            })
+            });
         });
 
         describe('View and Notify', function() {
@@ -445,7 +451,7 @@ describe('Api Responses', function() {
         });
 
         describe('Templates', function() {
-            it('should list templates thar the user can use paginated', async function () {
+            it('should list templates thar the user can use paginated', async function() {
                 const client = await getAuthenticatedTestClient();
                 const response = await client.listTemplates();
 
@@ -492,11 +498,11 @@ describe('Api Responses', function() {
         });
 
         describe('Remove', function() {
-            it('should delete a existing project', async function () {
+            it('should delete a existing project', async function() {
                 const client = await getAuthenticatedTestClient();
                 const newProject = await client.createProject({
                     title: 'New Project',
-                    blocks: []
+                    blocks: [],
                 });
 
                 const project = JSON.parse(newProject.body);
@@ -513,7 +519,7 @@ describe('Api Responses', function() {
         var testBlockId = null;
 
         describe('List Project Blocks', function() {
-            it('should list project blocks', async function () {
+            it('should list project blocks', async function() {
                 const projectId = '5ca344b1df6272001ae7d7ac';
                 const client = await getAuthenticatedTestClient();
                 const response = await client.listBlocks(projectId);
@@ -536,12 +542,12 @@ describe('Api Responses', function() {
         });
 
         describe('Create Project Block', function() {
-            it('should create and return a new project block', async function () {
+            it('should create and return a new project block', async function() {
                 const projectId = '5ca344b1df6272001ae7d7ac';
 
                 const client = await getAuthenticatedTestClient();
                 const response = await client.createBlock(projectId, {
-                    description: 'New Block'
+                    description: 'New Block',
                 });
 
                 const responseBody = JSON.parse(response.body);
@@ -563,7 +569,7 @@ describe('Api Responses', function() {
         });
 
         describe('Retrieve Project Block', function() {
-            it('should return a project block', async function () {
+            it('should return a project block', async function() {
                 const projectId = '5ca344b1df6272001ae7d7ac';
                 const blockId = '5cb8698632f905001a024614';
 
@@ -586,13 +592,13 @@ describe('Api Responses', function() {
         });
 
         describe('Update Project Block', function() {
-            it('should update and return a project block', async function () {
+            it('should update and return a project block', async function() {
                 const projectId = '5ca344b1df6272001ae7d7ac';
                 const blockId = '5cb8698632f905001a024614';
 
                 const client = await getAuthenticatedTestClient();
                 const response = await client.updateBlock(projectId, blockId, {
-                    description: 'Updated Block Description'
+                    description: 'Updated Block Description',
                 });
 
                 const responseBody = JSON.parse(response.body);
@@ -612,7 +618,7 @@ describe('Api Responses', function() {
         });
 
         describe('Move Project Block Forward', function() {
-            it('should move a project block forward (+1)', async function () {
+            it('should move a project block forward (+1)', async function() {
                 const projectId = '5ca344b1df6272001ae7d7ac';
 
                 const client = await getAuthenticatedTestClient();
@@ -634,7 +640,7 @@ describe('Api Responses', function() {
         });
 
         describe('Move Project Block Backward', function() {
-            it('should move a project block forward (-1)', async function () {
+            it('should move a project block forward (-1)', async function() {
                 const projectId = '5ca344b1df6272001ae7d7ac';
 
                 const client = await getAuthenticatedTestClient();
@@ -656,7 +662,7 @@ describe('Api Responses', function() {
         });
 
         describe('Clone Project Block', function() {
-            it('should clone a project block without a specific position', async function () {
+            it('should clone a project block without a specific position', async function() {
                 const projectId = '5ca344b1df6272001ae7d7ac';
 
                 const client = await getAuthenticatedTestClient();
@@ -676,7 +682,7 @@ describe('Api Responses', function() {
                 }`);
             });
 
-            it('should clone a project block and put it in a specific position', async function () {
+            it('should clone a project block and put it in a specific position', async function() {
                 const projectId = '5ca344b1df6272001ae7d7ac';
 
                 const client = await getAuthenticatedTestClient();
@@ -698,7 +704,7 @@ describe('Api Responses', function() {
         });
 
         describe('Remove Project Block', function() {
-            it('should delete a project block', async function () {
+            it('should delete a project block', async function() {
                 const projectId = '5ca344b1df6272001ae7d7ac';
 
                 const client = await getAuthenticatedTestClient();
@@ -713,7 +719,7 @@ describe('Api Responses', function() {
         var testRowId = null;
 
         describe('List Project Block Rows', function() {
-            it('should list project block rows', async function () {
+            it('should list project block rows', async function() {
                 const projectId = '5ca344b1df6272001ae7d7ac';
                 const blockId = '5cb8698632f905001a024614';
                 const client = await getAuthenticatedTestClient();
@@ -733,12 +739,12 @@ describe('Api Responses', function() {
         });
 
         describe('Create Project Block Row', function() {
-            it('should create and return a new project block row', async function () {
+            it('should create and return a new project block row', async function() {
                 const blockId = '5cb8698632f905001a024614';
                 const projectId = '5ca344b1df6272001ae7d7ac';
                 const client = await getAuthenticatedTestClient();
                 const response = await client.createRow(projectId, blockId, {
-                    description: 'New row'
+                    description: 'New row',
                 });
 
                 const responseBody = JSON.parse(response.body);
@@ -756,7 +762,7 @@ describe('Api Responses', function() {
         });
 
         describe('Retrieve Project Block Row', function() {
-            it('should list a project block row', async function () {
+            it('should list a project block row', async function() {
                 const projectId = '5ca344b1df6272001ae7d7ac';
                 const blockId = '5cb8698632f905001a024614';
                 const client = await getAuthenticatedTestClient();
@@ -774,12 +780,12 @@ describe('Api Responses', function() {
         });
 
         describe('Update Project Block Row', function() {
-            it('should update and return a project block row', async function () {
+            it('should update and return a project block row', async function() {
                 const blockId = '5cb8698632f905001a024614';
                 const projectId = '5ca344b1df6272001ae7d7ac';
                 const client = await getAuthenticatedTestClient();
                 const response = await client.updateRow(projectId, blockId, testRowId, {
-                    description: 'Updated row description'
+                    description: 'Updated row description',
                 });
 
                 const responseBody = JSON.parse(response.body);
@@ -795,7 +801,7 @@ describe('Api Responses', function() {
         });
 
         describe('Clone Project Block Row', function() {
-            it('should clone a project block row without a specific position', async function () {
+            it('should clone a project block row without a specific position', async function() {
                 const projectId = '5ca344b1df6272001ae7d7ac';
                 const blockId = '5cb8698632f905001a024614';
 
@@ -812,7 +818,7 @@ describe('Api Responses', function() {
                 }`);
             });
 
-            it('should clone project block row and put it in a specific position', async function () {
+            it('should clone project block row and put it in a specific position', async function() {
                 const projectId = '5ca344b1df6272001ae7d7ac';
                 const blockId = '5cb8698632f905001a024614';
 
@@ -831,7 +837,7 @@ describe('Api Responses', function() {
         });
 
         describe('Remove Project Block Row', function() {
-            it('should delete a project block row', async function () {
+            it('should delete a project block row', async function() {
                 const projectId = '5ca344b1df6272001ae7d7ac';
                 const blockId = '5cb8698632f905001a024614';
 
@@ -847,7 +853,7 @@ describe('Api Responses', function() {
         var testColumnId = null;
 
         describe('List Project Block Row Columns', function() {
-            it('should list project block row columns', async function () {
+            it('should list project block row columns', async function() {
                 const projectId = '5ca344b1df6272001ae7d7ac';
                 const blockId = '5cb8698632f905001a024614';
                 const rowId = '5cbf11c97f6a64001aea65f2';
@@ -868,14 +874,14 @@ describe('Api Responses', function() {
         });
 
         describe('Create Project Block Row Column', function() {
-            it('should create and return a new project block row column', async function () {
+            it('should create and return a new project block row column', async function() {
                 const blockId = '5cb8698632f905001a024614';
                 const projectId = '5ca344b1df6272001ae7d7ac';
                 const rowId = '5cbf11c97f6a64001aea65f2';
                 const client = await getAuthenticatedTestClient();
                 const response = await client.createColumn(projectId, blockId, rowId, {
                     contents: [],
-                    size: 12
+                    size: 12,
                 });
 
                 const responseBody = JSON.parse(response.body);
@@ -893,7 +899,7 @@ describe('Api Responses', function() {
         });
 
         describe('Retrieve Project Block Row Column', function() {
-            it('should list a project block row column', async function () {
+            it('should list a project block row column', async function() {
                 const projectId = '5ca344b1df6272001ae7d7ac';
                 const blockId = '5cb8698632f905001a024614';
                 const rowId = '5cbf11c97f6a64001aea65f2';
@@ -912,14 +918,20 @@ describe('Api Responses', function() {
         });
 
         describe('Update Project Block Row Column', function() {
-            it('should update and return a project block row column', async function () {
+            it('should update and return a project block row column', async function() {
                 const blockId = '5cb8698632f905001a024614';
                 const projectId = '5ca344b1df6272001ae7d7ac';
                 const rowId = '5cbf11c97f6a64001aea65f2';
                 const client = await getAuthenticatedTestClient();
-                const response = await client.updateColumn(projectId, blockId, rowId, testColumnId, {
-                    size: 11
-                });
+                const response = await client.updateColumn(
+                    projectId,
+                    blockId,
+                    rowId,
+                    testColumnId,
+                    {
+                        size: 11,
+                    }
+                );
 
                 const responseBody = JSON.parse(response.body);
 
@@ -934,7 +946,7 @@ describe('Api Responses', function() {
         });
 
         describe('Remove Project Block Row Column', function() {
-            it('should delete a project block row column', async function () {
+            it('should delete a project block row column', async function() {
                 const blockId = '5cb8698632f905001a024614';
                 const projectId = '5ca344b1df6272001ae7d7ac';
                 const rowId = '5cbf11c97f6a64001aea65f2';
@@ -951,7 +963,7 @@ describe('Api Responses', function() {
         var testContentId = null;
 
         describe('List Project Block Row Column Contents', function() {
-            it('should list project block row column contents', async function () {
+            it('should list project block row column contents', async function() {
                 const projectId = '5ca344b1df6272001ae7d7ac';
                 const blockId = '5cb8698632f905001a024614';
                 const rowId = '5cb8698632f905001a024615';
@@ -974,7 +986,7 @@ describe('Api Responses', function() {
         });
 
         describe('Create Project Block Row Column Content', function() {
-            it('should create and return a new project block row column content', async function () {
+            it('should create and return a new project block row column content', async function() {
                 const projectId = '5ca344b1df6272001ae7d7ac';
                 const blockId = '5cb8698632f905001a024614';
                 const rowId = '5cb8698632f905001a024615';
@@ -982,30 +994,30 @@ describe('Api Responses', function() {
                 const client = await getAuthenticatedTestClient();
                 const response = await client.createContent(projectId, blockId, rowId, columnId, {
                     style: {
-                        "backgroundImage": "",
-                        "backgroundRepeat": "no-repeat",
-                        "backgroundSize": "cover",
-                        "backgroundPosition": "center center",
-                        "opacity": 1
+                        backgroundImage: '',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center center',
+                        opacity: 1,
                     },
                     type: 'text',
                     data: {
                         json: {
-                            "type": "doc",
-                            "content": [
+                            type: 'doc',
+                            content: [
                                 {
-                                    "type": "paragraph",
-                                    "content": [
+                                    type: 'paragraph',
+                                    content: [
                                         {
-                                            "type": "text",
-                                            "text": "Lorem Ipsum"
-                                        }
-                                    ]
-                                }
-                            ]
+                                            type: 'text',
+                                            text: 'Lorem Ipsum',
+                                        },
+                                    ],
+                                },
+                            ],
                         },
-                        html: '<p style="text-align: center">Lorem Ipsum</p>'
-                    }
+                        html: '<p style="text-align: center">Lorem Ipsum</p>',
+                    },
                 });
 
                 const responseBody = JSON.parse(response.body);
@@ -1023,13 +1035,19 @@ describe('Api Responses', function() {
         });
 
         describe('Retrieve Project Block Row Column Content', function() {
-            it('should list a project block row column content', async function () {
+            it('should list a project block row column content', async function() {
                 const projectId = '5ca344b1df6272001ae7d7ac';
                 const blockId = '5cb8698632f905001a024614';
                 const rowId = '5cb8698632f905001a024615';
                 const columnId = '5cb869d132f905001a024656';
                 const client = await getAuthenticatedTestClient();
-                const response = await client.listContent(projectId, blockId, rowId, columnId, testContentId);
+                const response = await client.listContent(
+                    projectId,
+                    blockId,
+                    rowId,
+                    columnId,
+                    testContentId
+                );
 
                 const responseBody = JSON.parse(response.body);
 
@@ -1044,31 +1062,38 @@ describe('Api Responses', function() {
         });
 
         describe('Update Project Block Row Column Content', function() {
-            it('should update and return a project block row column content', async function () {
+            it('should update and return a project block row column content', async function() {
                 const projectId = '5ca344b1df6272001ae7d7ac';
                 const blockId = '5cb8698632f905001a024614';
                 const rowId = '5cb8698632f905001a024615';
                 const columnId = '5cb869d132f905001a024656';
                 const client = await getAuthenticatedTestClient();
-                const response = await client.updateContent(projectId, blockId, rowId, columnId, testContentId, {
-                    data: {
-                        json: {
-                            "type": "doc",
-                            "content": [
-                                {
-                                    "type": "paragraph",
-                                    "content": [
-                                        {
-                                            "type": "text",
-                                            "text": "Lorem Ipsuma"
-                                        }
-                                    ]
-                                }
-                            ]
+                const response = await client.updateContent(
+                    projectId,
+                    blockId,
+                    rowId,
+                    columnId,
+                    testContentId,
+                    {
+                        data: {
+                            json: {
+                                type: 'doc',
+                                content: [
+                                    {
+                                        type: 'paragraph',
+                                        content: [
+                                            {
+                                                type: 'text',
+                                                text: 'Lorem Ipsuma',
+                                            },
+                                        ],
+                                    },
+                                ],
+                            },
+                            html: '<p style="text-align: center">Lorem Ipsuma</p>',
                         },
-                        html: '<p style="text-align: center">Lorem Ipsuma</p>'
                     }
-                });
+                );
 
                 const responseBody = JSON.parse(response.body);
 
@@ -1083,13 +1108,19 @@ describe('Api Responses', function() {
         });
 
         describe('Remove Project Block Row Column Content', function() {
-            it('should delete a project block row column', async function () {
+            it('should delete a project block row column', async function() {
                 const projectId = '5ca344b1df6272001ae7d7ac';
                 const blockId = '5cb8698632f905001a024614';
                 const rowId = '5cb8698632f905001a024615';
                 const columnId = '5cb869d132f905001a024656';
                 const client = await getAuthenticatedTestClient();
-                const response = await client.deleteContent(projectId, blockId, rowId, columnId, testContentId);
+                const response = await client.deleteContent(
+                    projectId,
+                    blockId,
+                    rowId,
+                    columnId,
+                    testContentId
+                );
 
                 expect(response.statusCode).to.equal(204);
             });

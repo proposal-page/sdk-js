@@ -3,9 +3,9 @@ const Promise = require('bluebird');
 
 class Client {
     constructor(apiUrl = null) {
-        if (! apiUrl) {
+        if (!apiUrl) {
             this._apiUrl = 'https://api.proposalpage.com';
-        }  else {
+        } else {
             this._apiUrl = apiUrl;
         }
     }
@@ -25,34 +25,37 @@ class Client {
                 listRows: '/projects/${projectId}/blocks/${blockId}/rows',
                 listRow: '/projects/${projectId}/blocks/${blockId}/rows/${rowId}',
                 listColumns: '/projects/${projectId}/blocks/${blockId}/rows/${rowId}/columns',
-                listColumn: '/projects/${projectId}/blocks/${blockId}/rows/${rowId}/columns/${columnId}',
-                listContents: '/projects/${projectId}/blocks/${blockId}/rows/${rowId}/columns/${columnId}/contents',
-                listContent: '/projects/${projectId}/blocks/${blockId}/rows/${rowId}/columns/${columnId}/contents/${contentId}',
+                listColumn:
+                    '/projects/${projectId}/blocks/${blockId}/rows/${rowId}/columns/${columnId}',
+                listContents:
+                    '/projects/${projectId}/blocks/${blockId}/rows/${rowId}/columns/${columnId}/contents',
+                listContent:
+                    '/projects/${projectId}/blocks/${blockId}/rows/${rowId}/columns/${columnId}/contents/${contentId}',
             },
             post: {
                 authenticate: {
                     pathPattern: '/accounts/auth/token',
                     requestOptions: {
                         headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    }
+                            'Content-Type': 'application/json',
+                        },
+                    },
                 },
                 createProject: {
                     pathPattern: '/projects',
                     requestOptions: {
                         headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    }
+                            'Content-Type': 'application/json',
+                        },
+                    },
                 },
                 createProjectFromTemplate: {
                     pathPattern: '/projects/${templateId}/copy',
                     requestOptions: {
                         headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    }
+                            'Content-Type': 'application/json',
+                        },
+                    },
                 },
                 cloneProject: '/projects/${projectId}/clone',
                 setProjectPassword: '/projects/${projectId}/password',
@@ -63,9 +66,9 @@ class Client {
                     pathPattern: '/projects/${projectId}/blocks',
                     requestOptions: {
                         headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    }
+                            'Content-Type': 'application/json',
+                        },
+                    },
                 },
                 moveBlockForward: '/projects/${projectId}/blocks/${blockId}/forward',
                 moveBlockBackward: '/projects/${projectId}/blocks/${blockId}/backward',
@@ -74,26 +77,27 @@ class Client {
                     pathPattern: '/projects/${projectId}/blocks/${blockId}/rows',
                     requestOptions: {
                         headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    }
+                            'Content-Type': 'application/json',
+                        },
+                    },
                 },
                 cloneRow: '/projects/${projectId}/blocks/${blockId}/rows/${rowId}/clone',
                 createColumn: {
                     pathPattern: '/projects/${projectId}/blocks/${blockId}/rows/${rowId}/columns',
                     requestOptions: {
                         headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    }
+                            'Content-Type': 'application/json',
+                        },
+                    },
                 },
                 createContent: {
-                    pathPattern: '/projects/${projectId}/blocks/${blockId}/rows/${rowId}/columns/${columnId}/contents',
+                    pathPattern:
+                        '/projects/${projectId}/blocks/${blockId}/rows/${rowId}/columns/${columnId}/contents',
                     requestOptions: {
                         headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    }
+                            'Content-Type': 'application/json',
+                        },
+                    },
                 },
             },
             put: {
@@ -101,22 +105,26 @@ class Client {
                 viewProjectAndNotify: '/projects/${projectId}/view-and-notify',
                 updateBlock: '/projects/${projectId}/blocks/${blockId}',
                 updateRow: '/projects/${projectId}/blocks/${blockId}/rows/${rowId}',
-                updateColumn: '/projects/${projectId}/blocks/${blockId}/rows/${rowId}/columns/${columnId}',
-                updateContent: '/projects/${projectId}/blocks/${blockId}/rows/${rowId}/columns/${columnId}/contents/${contentId}',
+                updateColumn:
+                    '/projects/${projectId}/blocks/${blockId}/rows/${rowId}/columns/${columnId}',
+                updateContent:
+                    '/projects/${projectId}/blocks/${blockId}/rows/${rowId}/columns/${columnId}/contents/${contentId}',
             },
             delete: {
                 deleteProject: '/projects/${projectId}',
                 deleteBlock: '/projects/${projectId}/blocks/${blockId}',
                 deleteRow: '/projects/${projectId}/blocks/${blockId}/rows/${rowId}',
-                deleteColumn: '/projects/${projectId}/blocks/${blockId}/rows/${rowId}/columns/${columnId}',
-                deleteContent: '/projects/${projectId}/blocks/${blockId}/rows/${rowId}/columns/${columnId}/contents/${contentId}',
+                deleteColumn:
+                    '/projects/${projectId}/blocks/${blockId}/rows/${rowId}/columns/${columnId}',
+                deleteContent:
+                    '/projects/${projectId}/blocks/${blockId}/rows/${rowId}/columns/${columnId}/contents/${contentId}',
             },
             requestDefaults: {
                 headers: {
-                    'Authorization': `Bearer ${this._token}`,
-                    'Content-Type': 'application/json'
-                }
-            }
+                    Authorization: `Bearer ${this._token}`,
+                    'Content-Type': 'application/json',
+                },
+            },
         });
 
         return Promise.promisifyAll(wrapper);
@@ -158,19 +166,27 @@ class Client {
     }
 
     deleteProject(projectId) {
-        return this._wrapper().deleteProjectAsync({ projectId }, null)
+        return this._wrapper().deleteProjectAsync({ projectId }, null);
     }
 
     cloneProject(projectId) {
-        return this._wrapper().cloneProjectAsync({ projectId}, null, null);
+        return this._wrapper().cloneProjectAsync({ projectId }, null, null);
     }
 
     setProjectPassword(projectId, password) {
-        return this._wrapper().setProjectPasswordAsync({ projectId }, JSON.stringify({ password }), null);
+        return this._wrapper().setProjectPasswordAsync(
+            { projectId },
+            JSON.stringify({ password }),
+            null
+        );
     }
 
     checkProjectPassword(projectId, password) {
-        return this._wrapper().checkProjectPasswordAsync({ projectId }, JSON.stringify({ password }), null);
+        return this._wrapper().checkProjectPasswordAsync(
+            { projectId },
+            JSON.stringify({ password }),
+            null
+        );
     }
 
     publishProject(projectId) {
@@ -203,7 +219,11 @@ class Client {
     }
 
     updateBlock(projectId, blockId, params) {
-        return this._wrapper().updateBlockAsync({ projectId, blockId }, JSON.stringify(params), null);
+        return this._wrapper().updateBlockAsync(
+            { projectId, blockId },
+            JSON.stringify(params),
+            null
+        );
     }
 
     deleteBlock(projectId, blockId) {
@@ -236,7 +256,11 @@ class Client {
     }
 
     updateRow(projectId, blockId, rowId, params) {
-        return this._wrapper().updateRowAsync({ projectId, blockId, rowId }, JSON.stringify(params), null);
+        return this._wrapper().updateRowAsync(
+            { projectId, blockId, rowId },
+            JSON.stringify(params),
+            null
+        );
     }
 
     deleteRow(projectId, blockId, rowId) {
@@ -249,7 +273,11 @@ class Client {
 
     // Columns
     createColumn(projectId, blockId, rowId, params) {
-        return this._wrapper().createColumnAsync({ projectId, blockId, rowId }, JSON.stringify(params), null);
+        return this._wrapper().createColumnAsync(
+            { projectId, blockId, rowId },
+            JSON.stringify(params),
+            null
+        );
     }
 
     listColumns(projectId, blockId, rowId) {
@@ -257,11 +285,15 @@ class Client {
     }
 
     listColumn(projectId, blockId, rowId, columnId) {
-        return this._wrapper().listColumnAsync({ projectId, blockId, rowId, columnId }, null)
+        return this._wrapper().listColumnAsync({ projectId, blockId, rowId, columnId }, null);
     }
 
     updateColumn(projectId, blockId, rowId, columnId, params) {
-        return this._wrapper().updateColumnAsync({ projectId, blockId, rowId, columnId }, JSON.stringify(params), null);
+        return this._wrapper().updateColumnAsync(
+            { projectId, blockId, rowId, columnId },
+            JSON.stringify(params),
+            null
+        );
     }
 
     deleteColumn(projectId, blockId, rowId, columnId) {
@@ -270,7 +302,11 @@ class Client {
 
     // Contents
     createContent(projectId, blockId, rowId, columnId, params) {
-        return this._wrapper().createContentAsync({ projectId, blockId, rowId, columnId }, JSON.stringify(params), null);
+        return this._wrapper().createContentAsync(
+            { projectId, blockId, rowId, columnId },
+            JSON.stringify(params),
+            null
+        );
     }
 
     listContents(projectId, blockId, rowId, columnId) {
@@ -278,15 +314,25 @@ class Client {
     }
 
     listContent(projectId, blockId, rowId, columnId, contentId) {
-        return this._wrapper().listContentAsync({ projectId, blockId, rowId, columnId, contentId }, null);
+        return this._wrapper().listContentAsync(
+            { projectId, blockId, rowId, columnId, contentId },
+            null
+        );
     }
 
     updateContent(projectId, blockId, rowId, columnId, contentId, params) {
-        return this._wrapper().updateContentAsync({ projectId, blockId, rowId, columnId, contentId }, JSON.stringify(params), null);
+        return this._wrapper().updateContentAsync(
+            { projectId, blockId, rowId, columnId, contentId },
+            JSON.stringify(params),
+            null
+        );
     }
 
     deleteContent(projectId, blockId, rowId, columnId, contentId) {
-        return this._wrapper().deleteContentAsync({ projectId, blockId, rowId, columnId, contentId }, null);
+        return this._wrapper().deleteContentAsync(
+            { projectId, blockId, rowId, columnId, contentId },
+            null
+        );
     }
 
     get token() {
