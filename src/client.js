@@ -19,7 +19,7 @@ class Client {
                 listTemplates: '/projects/templates',
                 listProjects: '/projects',
                 listProject: '/projects/${projectId}',
-                generateProjectCover: '/projects/${projectId}',
+                generateProjectCover: '/projects/${projectId}/screenshot',
                 listBlocks: '/projects/${projectId}/blocks',
                 listBlock: '/projects/${projectId}/blocks/${blockId}',
                 listRows: '/projects/${projectId}/blocks/${blockId}/rows',
