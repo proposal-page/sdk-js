@@ -79,7 +79,7 @@ describe('Api Responses', function() {
                 const client = await getUnauthenticatedTestClient();
 
                 const username = 'teste@teste.com';
-                const password = 'test';
+                const password = 'teste';
 
                 const response = await client.authenticate({
                     username,
@@ -149,7 +149,7 @@ describe('Api Responses', function() {
         describe('List', function() {
             it('should list user projects paginated', async function () {
                 const client = await getAuthenticatedTestClient();
-                const response = await client.listProjects(testProjectId);
+                const response = await client.listProjects();
 
                 const responseBody = JSON.parse(response.body);
                 const projects = responseBody.items;
@@ -482,9 +482,9 @@ describe('Api Responses', function() {
                         "updatedAt": String,
                         "__v": Number,
                         "password"?: String OR null,
-                        "cover": String,
-                        "currency": String,
-                        "heating": Object,
+                        "cover"?: String,
+                        "currency"?: String,
+                        "heating"?: Object,
                         "lastView": String,
                     }`);
                 });
