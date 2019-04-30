@@ -20,15 +20,10 @@ async function getAuthenticatedTestClient() {
     if (!authenticatedTestClient) {
         authenticatedTestClient = new SDKClient('http://localhost:3000');
 
-        const username = 'teste@teste.com';
-        const password = 'teste';
+        const username = 'gian_bine@hotmail.com';
+        const password = 'gian6280';
 
-        const auth = await authenticatedTestClient.authenticate({
-            username,
-            password,
-        });
-
-        authenticatedTestClient.token = JSON.parse(auth.body).token;
+        await authenticatedTestClient.authenticate(username, password);
     }
 
     return authenticatedTestClient;
@@ -81,13 +76,10 @@ describe('Api Responses', function() {
                 const username = 'teste@teste.com';
                 const password = 'teste';
 
-                const response = await client.authenticate({
-                    username,
-                    password,
-                });
+                const response = await client.authenticate(username, password);
 
                 expect(response.statusCode).to.equal(200);
-                expect(JSON.parse(response.body)).to.matchPattern(`{
+                expect(response.json).to.matchPattern(`{
                     "token": String,
                 }`);
             });
@@ -99,7 +91,7 @@ describe('Api Responses', function() {
                 const response = await client.authMe();
 
                 expect(response.statusCode).to.equal(200);
-                expect(JSON.parse(response.body)).to.matchPattern(`{
+                expect(response.json).to.matchPattern(`{
                     "id": String,
                 }`);
             });
@@ -117,7 +109,7 @@ describe('Api Responses', function() {
                     blocks: [],
                 });
 
-                const responseBody = JSON.parse(response.body);
+                const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(201);
                 expect(responseBody).to.matchPattern(`{
@@ -151,7 +143,7 @@ describe('Api Responses', function() {
                 const client = await getAuthenticatedTestClient();
                 const response = await client.listProjects();
 
-                const responseBody = JSON.parse(response.body);
+                const responseBody = response.json;
                 const projects = responseBody.items;
 
                 expect(response.statusCode).to.equal(200);
@@ -195,7 +187,7 @@ describe('Api Responses', function() {
                 const response = await client.listProject(testProjectId);
 
                 expect(response.statusCode).to.equal(200);
-                expect(JSON.parse(response.body)).to.matchPattern(`{
+                expect(response.json).to.matchPattern(`{
                     "_id": String,
                     "title": String,
                     "fonts": Array,
@@ -226,7 +218,7 @@ describe('Api Responses', function() {
                     title: 'Updated Project Title',
                 });
 
-                const responseBody = JSON.parse(response.body);
+                const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(200);
                 expect(responseBody).to.matchPattern(`{
@@ -257,7 +249,7 @@ describe('Api Responses', function() {
                 const client = await getAuthenticatedTestClient();
                 const response = await client.cloneProject(testProjectId);
 
-                const responseBody = JSON.parse(response.body);
+                const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(200);
                 expect(responseBody).to.matchPattern(`{
@@ -290,7 +282,7 @@ describe('Api Responses', function() {
                 const client = await getAuthenticatedTestClient();
                 const response = await client.setProjectPassword(testProjectId, 'password');
 
-                const responseBody = JSON.parse(response.body);
+                const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(200);
                 expect(responseBody).to.matchPattern(`{
@@ -338,7 +330,7 @@ describe('Api Responses', function() {
                 const client = await getAuthenticatedTestClient();
                 const response = await client.publishProject(testProjectId);
 
-                const responseBody = JSON.parse(response.body);
+                const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(200);
                 expect(responseBody).to.matchPattern(`{
@@ -370,7 +362,7 @@ describe('Api Responses', function() {
                 const client = await getAuthenticatedTestClient();
                 const response = await client.secureProject(testProjectId);
 
-                const responseBody = JSON.parse(response.body);
+                const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(200);
                 expect(responseBody).to.matchPattern(`{
@@ -412,7 +404,7 @@ describe('Api Responses', function() {
                 const client = await getAuthenticatedTestClient();
                 const response = await client.createProjectFromTemplate(templateId);
 
-                const responseBody = JSON.parse(response.body);
+                const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(200);
                 expect(responseBody).to.matchPattern(`{
@@ -443,7 +435,7 @@ describe('Api Responses', function() {
                 const client = await getUnauthenticatedTestClient();
                 const response = await client.viewProjectAndNotify(testProjectId);
 
-                const responseBody = JSON.parse(response.body);
+                const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(200);
                 // expect(responseBody.emailSent).to.equal(true);
@@ -455,7 +447,7 @@ describe('Api Responses', function() {
                 const client = await getAuthenticatedTestClient();
                 const response = await client.listTemplates();
 
-                const responseBody = JSON.parse(response.body);
+                const responseBody = response.json;
                 const templates = responseBody.items;
 
                 expect(response.statusCode).to.equal(200);
@@ -524,7 +516,7 @@ describe('Api Responses', function() {
                 const client = await getAuthenticatedTestClient();
                 const response = await client.listBlocks(projectId);
 
-                const blocks = JSON.parse(response.body);
+                const blocks = response.json;
 
                 expect(response.statusCode).to.equal(200);
                 blocks.forEach(block => {
@@ -550,7 +542,7 @@ describe('Api Responses', function() {
                     description: 'New Block',
                 });
 
-                const responseBody = JSON.parse(response.body);
+                const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(201);
                 expect(responseBody).to.matchPattern(`{
@@ -576,7 +568,7 @@ describe('Api Responses', function() {
                 const client = await getAuthenticatedTestClient();
                 const response = await client.listBlock(projectId, blockId);
 
-                const responseBody = JSON.parse(response.body);
+                const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(200);
                 expect(responseBody).to.matchPattern(`{
@@ -601,7 +593,7 @@ describe('Api Responses', function() {
                     description: 'Updated Block Description',
                 });
 
-                const responseBody = JSON.parse(response.body);
+                const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(200);
                 expect(responseBody).to.matchPattern(`{
@@ -624,7 +616,7 @@ describe('Api Responses', function() {
                 const client = await getAuthenticatedTestClient();
                 const response = await client.moveBlockForward(projectId, testBlockId);
 
-                const responseBody = JSON.parse(response.body);
+                const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(200);
                 expect(responseBody).to.matchPattern(`{
@@ -646,7 +638,7 @@ describe('Api Responses', function() {
                 const client = await getAuthenticatedTestClient();
                 const response = await client.moveBlockBackward(projectId, testBlockId);
 
-                const responseBody = JSON.parse(response.body);
+                const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(200);
                 expect(responseBody).to.matchPattern(`{
@@ -668,7 +660,7 @@ describe('Api Responses', function() {
                 const client = await getAuthenticatedTestClient();
                 const response = await client.cloneBlock(projectId, testBlockId);
 
-                const responseBody = JSON.parse(response.body);
+                const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(201);
                 expect(responseBody).to.matchPattern(`{
@@ -688,7 +680,7 @@ describe('Api Responses', function() {
                 const client = await getAuthenticatedTestClient();
                 const response = await client.cloneBlock(projectId, testBlockId, 0);
 
-                const responseBody = JSON.parse(response.body);
+                const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(201);
                 expect(responseBody).to.matchPattern(`{
@@ -725,7 +717,7 @@ describe('Api Responses', function() {
                 const client = await getAuthenticatedTestClient();
                 const response = await client.listRows(projectId, blockId);
 
-                const rows = JSON.parse(response.body);
+                const rows = response.json;
 
                 expect(response.statusCode).to.equal(200);
                 rows.forEach(row => {
@@ -747,7 +739,7 @@ describe('Api Responses', function() {
                     description: 'New row',
                 });
 
-                const responseBody = JSON.parse(response.body);
+                const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(201);
                 expect(responseBody).to.matchPattern(`{
@@ -768,7 +760,7 @@ describe('Api Responses', function() {
                 const client = await getAuthenticatedTestClient();
                 const response = await client.listRow(projectId, blockId, testRowId);
 
-                const responseBody = JSON.parse(response.body);
+                const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(200);
                 expect(responseBody).to.matchPattern(`{
@@ -788,7 +780,7 @@ describe('Api Responses', function() {
                     description: 'Updated row description',
                 });
 
-                const responseBody = JSON.parse(response.body);
+                const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(200);
                 expect(responseBody).to.matchPattern(`{
@@ -808,7 +800,7 @@ describe('Api Responses', function() {
                 const client = await getAuthenticatedTestClient();
                 const response = await client.cloneRow(projectId, blockId, testRowId);
 
-                const responseBody = JSON.parse(response.body);
+                const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(201);
                 expect(responseBody).to.matchPattern(`{
@@ -825,7 +817,7 @@ describe('Api Responses', function() {
                 const client = await getAuthenticatedTestClient();
                 const response = await client.cloneRow(projectId, blockId, testRowId, 0);
 
-                const responseBody = JSON.parse(response.body);
+                const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(201);
                 expect(responseBody).to.matchPattern(`{
@@ -860,7 +852,7 @@ describe('Api Responses', function() {
                 const client = await getAuthenticatedTestClient();
                 const response = await client.listColumns(projectId, blockId, rowId);
 
-                const columns = JSON.parse(response.body);
+                const columns = response.json;
 
                 expect(response.statusCode).to.equal(200);
                 columns.forEach(column => {
@@ -884,7 +876,7 @@ describe('Api Responses', function() {
                     size: 12,
                 });
 
-                const responseBody = JSON.parse(response.body);
+                const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(201);
                 expect(responseBody).to.matchPattern(`{
@@ -906,7 +898,7 @@ describe('Api Responses', function() {
                 const client = await getAuthenticatedTestClient();
                 const response = await client.listColumn(projectId, blockId, rowId, testColumnId);
 
-                const responseBody = JSON.parse(response.body);
+                const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(200);
                 expect(responseBody).to.matchPattern(`{
@@ -933,7 +925,7 @@ describe('Api Responses', function() {
                     }
                 );
 
-                const responseBody = JSON.parse(response.body);
+                const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(200);
                 expect(responseBody).to.matchPattern(`{
@@ -971,7 +963,7 @@ describe('Api Responses', function() {
                 const client = await getAuthenticatedTestClient();
                 const response = await client.listContents(projectId, blockId, rowId, columnId);
 
-                const contents = JSON.parse(response.body);
+                const contents = response.json;
 
                 expect(response.statusCode).to.equal(200);
                 contents.forEach(content => {
@@ -1020,7 +1012,7 @@ describe('Api Responses', function() {
                     },
                 });
 
-                const responseBody = JSON.parse(response.body);
+                const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(201);
                 expect(responseBody).to.matchPattern(`{
@@ -1049,7 +1041,7 @@ describe('Api Responses', function() {
                     testContentId
                 );
 
-                const responseBody = JSON.parse(response.body);
+                const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(200);
                 expect(responseBody).to.matchPattern(`{
@@ -1095,7 +1087,7 @@ describe('Api Responses', function() {
                     }
                 );
 
-                const responseBody = JSON.parse(response.body);
+                const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(200);
                 expect(responseBody).to.matchPattern(`{

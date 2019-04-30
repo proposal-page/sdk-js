@@ -16,8 +16,8 @@ class Client {
             parseJSON: true,
             get: {
                 authMe: '/accounts/auth/me',
-                listTemplates: '/projects/templates',
-                listProjects: '/projects',
+                listTemplates: '/projects/templates/?page|itemsPerPage',
+                listProjects: '/projects/?page|itemsPerPage',
                 listProject: '/projects/${projectId}',
                 generateProjectCover: '/projects/${projectId}/screenshot',
                 listBlocks: '/projects/${projectId}/blocks',
@@ -130,209 +130,267 @@ class Client {
         return Promise.promisifyAll(wrapper);
     }
 
+    _request(httpVerb, method, pathParams = {}, params = null) {
+        if (httpVerb === 'GET' || httpVerb === 'DELETE') {
+            return new Promise((resolve, reject) => {
+                this._wrapper()
+                    [method](pathParams, null)
+                    .then(response => {
+                        if (response.body) {
+                            const json = JSON.parse(response.body);
+
+                            resolve({
+                                ...response,
+                                json,
+                            });
+                        } else {
+                            resolve(response);
+                        }
+                    })
+                    .catch(error => reject(error));
+            });
+        } else {
+            if (params) {
+                params = JSON.stringify(params);
+            }
+
+            return new Promise((resolve, reject) => {
+                this._wrapper()
+                    [method](pathParams, params, null)
+                    .then(response => {
+                        if (response.body) {
+                            const json = JSON.parse(response.body);
+
+                            resolve({
+                                ...response,
+                                json,
+                            });
+                        } else {
+                            resolve(response);
+                        }
+                    })
+                    .catch(error => reject(error));
+            });
+        }
+    }
+
     // Auth
-    authenticate(params) {
-        return this._wrapper().authenticateAsync({}, JSON.stringify(params), null);
+    authenticate(username, password, setToken = true) {
+        const client = this;
+
+        return new Promise((resolve, reject) => {
+            client
+                ._wrapper()
+                .authenticateAsync({}, JSON.stringify({ username, password }))
+                .then(response => {
+                    const json = JSON.parse(response.body);
+
+                    if (setToken) {
+                        client.token = json.token;
+                    }
+
+                    resolve({
+                        ...response,
+                        json,
+                    });
+                })
+                .catch(error => reject(error));
+        });
     }
 
     authMe() {
-        return this._wrapper().authMeAsync({}, null);
+        return this._request('GET', 'authMeAsync');
     }
 
     // Templates
-    listTemplates() {
-        return this._wrapper().listTemplatesAsync({}, null);
+    listTemplates(page = 1, itemsPerPage = 6) {
+        return this._request('GET', 'listTemplatesAsync', { page, itemsPerPage });
     }
 
     // Projects
     createProject(params) {
-        return this._wrapper().createProjectAsync({}, JSON.stringify(params), null);
+        return this._request('POST', 'createProjectAsync', {}, params);
     }
 
     createProjectFromTemplate(templateId) {
-        return this._wrapper().createProjectFromTemplateAsync({ templateId }, null, null);
+        return this._request('POST', 'createProjectFromTemplateAsync', { templateId });
     }
 
-    listProjects() {
-        return this._wrapper().listProjectsAsync({}, null);
+    listProjects(page = 1, itemsPerPage = 6) {
+        return this._request('GET', 'listProjectsAsync', { page, itemsPerPage });
     }
 
     listProject(projectId) {
-        return this._wrapper().listProjectAsync({ projectId }, null);
+        return this._request('GET', 'listProjectAsync', { projectId });
     }
 
     updateProject(projectId, params) {
-        return this._wrapper().updateProjectAsync({ projectId }, JSON.stringify(params), null);
+        return this._request('PUT', 'updateProjectAsync', { projectId }, params);
     }
 
     deleteProject(projectId) {
-        return this._wrapper().deleteProjectAsync({ projectId }, null);
+        return this._request('DELETE', 'deleteProjectAsync', { projectId });
     }
 
     cloneProject(projectId) {
-        return this._wrapper().cloneProjectAsync({ projectId }, null, null);
+        return this._request('POST', 'cloneProjectAsync', { projectId });
     }
 
     setProjectPassword(projectId, password) {
-        return this._wrapper().setProjectPasswordAsync(
-            { projectId },
-            JSON.stringify({ password }),
-            null
-        );
+        return this._request('POST', 'setProjectPasswordAsync', { projectId }, { password });
     }
 
     checkProjectPassword(projectId, password) {
-        return this._wrapper().checkProjectPasswordAsync(
-            { projectId },
-            JSON.stringify({ password }),
-            null
-        );
+        return this._request('POST', 'checkProjectPasswordAsync', { projectId }, { password });
     }
 
     publishProject(projectId) {
-        return this._wrapper().publishProjectAsync({ projectId }, null, null);
+        return this._request('POST', 'publishProjectAsync', { projectId });
     }
 
     secureProject(projectId) {
-        return this._wrapper().secureProjectAsync({ projectId }, null, null);
+        return this._request('POST', 'secureProjectAsync', { projectId });
     }
 
     generateProjectCover(projectId) {
-        return this._wrapper().generateProjectCoverAsync({ projectId }, null);
+        return this._request('GET', 'secureProjectAsync', { projectId });
     }
 
     viewProjectAndNotify(projectId) {
-        return this._wrapper().viewProjectAndNotifyAsync({ projectId }, null, null);
+        return this._request('PUT', 'viewProjectAndNotifyAsync', { projectId });
     }
 
     // Blocks
     createBlock(projectId, params) {
-        return this._wrapper().createBlockAsync({ projectId }, JSON.stringify(params), null);
+        return this._request('POST', 'createBlockAsync', { projectId }, params);
     }
 
     listBlocks(projectId) {
-        return this._wrapper().listBlocksAsync({ projectId }, null);
+        return this._request('GET', 'listBlocksAsync', { projectId });
     }
 
     listBlock(projectId, blockId) {
-        return this._wrapper().listBlockAsync({ projectId, blockId }, null);
+        return this._request('GET', 'listBlockAsync', { projectId, blockId });
     }
 
     updateBlock(projectId, blockId, params) {
-        return this._wrapper().updateBlockAsync(
-            { projectId, blockId },
-            JSON.stringify(params),
-            null
-        );
+        return this._request('PUT', 'updateBlockAsync', { projectId, blockId }, params);
     }
 
     deleteBlock(projectId, blockId) {
-        return this._wrapper().deleteBlockAsync({ projectId, blockId }, null);
+        return this._request('DELETE', 'deleteBlockAsync', { projectId, blockId });
     }
 
     moveBlockForward(projectId, blockId) {
-        return this._wrapper().moveBlockForwardAsync({ projectId, blockId }, null, null);
+        return this._request('POST', 'moveBlockForwardAsync', { projectId, blockId });
     }
 
     moveBlockBackward(projectId, blockId) {
-        return this._wrapper().moveBlockBackwardAsync({ projectId, blockId }, null, null);
+        return this._request('POST', 'moveBlockBackwardAsync', { projectId, blockId });
     }
 
     cloneBlock(projectId, blockId, position = '') {
-        return this._wrapper().cloneBlockAsync({ projectId, blockId, position }, null, null);
+        return this._request('POST', 'cloneBlockAsync', { projectId, blockId, position });
     }
 
     // Rows
     createRow(projectId, blockId, params) {
-        return this._wrapper().createRowAsync({ projectId, blockId }, JSON.stringify(params), null);
+        return this._request('POST', 'createRowAsync', { projectId, blockId }, params);
     }
 
     listRows(projectId, blockId) {
-        return this._wrapper().listRowsAsync({ projectId, blockId }, null);
+        return this._request('GET', 'listRowsAsync', { projectId, blockId });
     }
 
     listRow(projectId, blockId, rowId) {
-        return this._wrapper().listRowAsync({ projectId, blockId, rowId }, null);
+        return this._request('GET', 'listRowAsync', { projectId, blockId, rowId });
     }
 
     updateRow(projectId, blockId, rowId, params) {
-        return this._wrapper().updateRowAsync(
-            { projectId, blockId, rowId },
-            JSON.stringify(params),
-            null
-        );
+        return this._request('PUT', 'updateRowAsync', { projectId, blockId, rowId }, params);
     }
 
     deleteRow(projectId, blockId, rowId) {
-        return this._wrapper().deleteRowAsync({ projectId, blockId, rowId }, null);
+        return this._request('DELETE', 'deleteRowAsync', { projectId, blockId, rowId });
+        // return this._wrapper().deleteRowAsync({ projectId, blockId, rowId }, null);
     }
 
     cloneRow(projectId, blockId, rowId, position = '') {
-        return this._wrapper().cloneRowAsync({ projectId, blockId, rowId, position }, null, null);
+        return this._request('POST', 'cloneRowAsync', { projectId, blockId, rowId, position });
     }
 
     // Columns
     createColumn(projectId, blockId, rowId, params) {
-        return this._wrapper().createColumnAsync(
-            { projectId, blockId, rowId },
-            JSON.stringify(params),
-            null
-        );
+        return this._request('POST', 'createColumnAsync', { projectId, blockId, rowId }, params);
     }
 
     listColumns(projectId, blockId, rowId) {
-        return this._wrapper().listColumnsAsync({ projectId, blockId, rowId }, null);
+        return this._request('GET', 'listColumnsAsync', { projectId, blockId, rowId });
     }
 
     listColumn(projectId, blockId, rowId, columnId) {
-        return this._wrapper().listColumnAsync({ projectId, blockId, rowId, columnId }, null);
+        return this._request('GET', 'listColumnAsync', { projectId, blockId, rowId, columnId });
     }
 
     updateColumn(projectId, blockId, rowId, columnId, params) {
-        return this._wrapper().updateColumnAsync(
+        return this._request(
+            'PUT',
+            'updateColumnAsync',
             { projectId, blockId, rowId, columnId },
-            JSON.stringify(params),
-            null
+            params
         );
     }
 
     deleteColumn(projectId, blockId, rowId, columnId) {
-        return this._wrapper().deleteColumnAsync({ projectId, blockId, rowId, columnId }, null);
+        return this._request('DELETE', 'deleteColumnAsync', {
+            projectId,
+            blockId,
+            rowId,
+            columnId,
+        });
     }
 
     // Contents
     createContent(projectId, blockId, rowId, columnId, params) {
-        return this._wrapper().createContentAsync(
+        return this._request(
+            'POST',
+            'createContentAsync',
             { projectId, blockId, rowId, columnId },
-            JSON.stringify(params),
-            null
+            params
         );
     }
 
     listContents(projectId, blockId, rowId, columnId) {
-        return this._wrapper().listContentsAsync({ projectId, blockId, rowId, columnId }, null);
+        return this._request('GET', 'listContentsAsync', { projectId, blockId, rowId, columnId });
     }
 
     listContent(projectId, blockId, rowId, columnId, contentId) {
-        return this._wrapper().listContentAsync(
-            { projectId, blockId, rowId, columnId, contentId },
-            null
-        );
+        return this._request('GET', 'listContentAsync', {
+            projectId,
+            blockId,
+            rowId,
+            columnId,
+            contentId,
+        });
     }
 
     updateContent(projectId, blockId, rowId, columnId, contentId, params) {
-        return this._wrapper().updateContentAsync(
+        return this._request(
+            'PUT',
+            'updateContentAsync',
             { projectId, blockId, rowId, columnId, contentId },
-            JSON.stringify(params),
-            null
+            params
         );
     }
 
     deleteContent(projectId, blockId, rowId, columnId, contentId) {
-        return this._wrapper().deleteContentAsync(
-            { projectId, blockId, rowId, columnId, contentId },
-            null
-        );
+        return this._request('DELETE', 'deleteContentAsync', {
+            projectId,
+            blockId,
+            rowId,
+            columnId,
+            contentId,
+        });
     }
 
     get token() {
