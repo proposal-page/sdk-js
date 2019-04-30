@@ -1,6 +1,10 @@
 # Proposal Page - JS SDK
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/proposal-page/sdk-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/proposal-page/sdk-php/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/proposal-page/sdk-js/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/proposal-page/sdk-js/?branch=master)
+[![Latest Version on NPM](https://img.shields.io/npm/v/@proposal-page/proposal-page-sdk.svg?style=flat-square)](https://npmjs.com/package/@proposal-page/proposal-page-sdk)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
+[![Build Status](https://scrutinizer-ci.com/g/proposal-page/sdk-js/badges/build.png?b=master)](https://scrutinizer-ci.com/g/proposal-page/sdk-js/build-status/master)
+[![npm](https://img.shields.io/npm/dt/@proposal-page/proposal-page-sdk.svg?style=flat-square)](https://npmjs.com/package/@proposal-page/proposal-page-sdk)
 
 Proposal Page is the most modern way to manage your business proposals.
 
