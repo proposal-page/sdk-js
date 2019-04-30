@@ -11,6 +11,7 @@ var authenticatedTestClient = null;
 var unauthenticatedTestClient = null;
 async function getUnauthenticatedTestClient() {
     if (!unauthenticatedTestClient) {
+        /** global: SDKClient */
         unauthenticatedTestClient = new SDKClient('http://localhost:3000');
     }
 
@@ -18,6 +19,7 @@ async function getUnauthenticatedTestClient() {
 }
 async function getAuthenticatedTestClient() {
     if (!authenticatedTestClient) {
+        /** global: SDKClient */
         authenticatedTestClient = new SDKClient('http://localhost:3000');
 
         const username = 'gian_bine@hotmail.com';
@@ -36,11 +38,13 @@ describe('Wrapper', function() {
 
     describe('Api Url', function() {
         it('should get default api url if no url is passed in constructor', function() {
+            /** global: SDKClient */
             const client = new SDKClient();
 
             expect(client.apiUrl).to.equal('https://api.proposalpage.com');
         });
         it('should get passed url if a url is passed in constructor', function() {
+            /** global: SDKClient */
             const client = new SDKClient('https://example.com');
 
             expect(client.apiUrl).to.equal('https://example.com');
@@ -49,11 +53,13 @@ describe('Wrapper', function() {
 
     describe('Token', function() {
         it('should not have a default token set', function() {
+            /** global: SDKClient */
             const client = new SDKClient();
 
             expect(client.token).to.be.undefined;
         });
         it('should get the token that has been set', function() {
+            /** global: SDKClient */
             const client = new SDKClient();
 
             client.token = 'token';
@@ -435,7 +441,7 @@ describe('Api Responses', function() {
                 const client = await getUnauthenticatedTestClient();
                 const response = await client.viewProjectAndNotify(testProjectId);
 
-                const responseBody = response.json;
+                // const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(200);
                 // expect(responseBody.emailSent).to.equal(true);
