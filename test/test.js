@@ -731,6 +731,8 @@ describe('Api Responses', function() {
                         "_id": String,
                         "description": String,
                         "columns": Array,
+                        "createdAt": String,
+                        "updatedAt": String,
                     }`);
                 });
             });
@@ -752,6 +754,8 @@ describe('Api Responses', function() {
                     "_id": String,
                     "description": String,
                     "columns": Array,
+                    "createdAt": String,
+                    "updatedAt": String,
                 }`);
                 expect(responseBody.description).to.equal('New row');
 
@@ -773,6 +777,8 @@ describe('Api Responses', function() {
                     "_id": String,
                     "description": String,
                     "columns": Array,
+                    "createdAt": String,
+                    "updatedAt": String,
                 }`);
             });
         });
@@ -793,6 +799,8 @@ describe('Api Responses', function() {
                 "_id": String,
                 "description": String,
                 "columns": Array,
+                "createdAt": String,
+                "updatedAt": String,
             }`);
                 expect(responseBody.description).to.equal('Updated row description');
             });
@@ -813,6 +821,8 @@ describe('Api Responses', function() {
                     "_id": String,
                     "description": String,
                     "columns": Array,
+                    "createdAt": String,
+                    "updatedAt": String,
                 }`);
             });
 
@@ -830,6 +840,8 @@ describe('Api Responses', function() {
                     "_id": String,
                     "description": String,
                     "columns": Array,
+                    "createdAt": String,
+                    "updatedAt": String,
                 }`);
             });
         });
@@ -866,6 +878,8 @@ describe('Api Responses', function() {
                         "_id": String,
                         "contents": Array,
                         "size": Number,
+                        "createdAt": String,
+                        "updatedAt": String,
                     }`);
                 });
             });
@@ -886,10 +900,12 @@ describe('Api Responses', function() {
 
                 expect(response.statusCode).to.equal(201);
                 expect(responseBody).to.matchPattern(`{
-                "_id": String,
-                "contents": Array,
-                "size": Number,
-            }`);
+                    "_id": String,
+                    "contents": Array,
+                    "size": Number,
+                    "createdAt": String,
+                    "updatedAt": String,
+                }`);
                 expect(responseBody.size).to.equal(12);
 
                 testColumnId = responseBody._id;
@@ -911,6 +927,8 @@ describe('Api Responses', function() {
                     "_id": String,
                     "contents": Array,
                     "size": Number,
+                    "createdAt": String,
+                    "updatedAt": String,
                 }`);
             });
         });
@@ -938,6 +956,8 @@ describe('Api Responses', function() {
                     "_id": String,
                     "contents": Array,
                     "size": Number,
+                    "createdAt": String,
+                    "updatedAt": String,
                 }`);
                 expect(responseBody.size).to.equal(11);
             });
@@ -978,6 +998,8 @@ describe('Api Responses', function() {
                         "type": String,
                         "style": Object,
                         "data": Object,
+                        "createdAt": String,
+                        "updatedAt": String,
                     }`);
                 });
             });
@@ -1026,6 +1048,8 @@ describe('Api Responses', function() {
                     "type": String,
                     "style": Object,
                     "data": Object,
+                    "createdAt": String,
+                    "updatedAt": String,
                 }`);
 
                 testContentId = responseBody._id;
@@ -1055,6 +1079,8 @@ describe('Api Responses', function() {
                     "type": String,
                     "style": Object,
                     "data": Object,
+                    "createdAt": String,
+                    "updatedAt": String,
                 }`);
             });
         });
@@ -1101,6 +1127,8 @@ describe('Api Responses', function() {
                     "type": String,
                     "style": Object,
                     "data": Object,
+                    "createdAt": String,
+                    "updatedAt": String,
                 }`);
             });
         });
