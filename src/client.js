@@ -17,7 +17,7 @@ class Client {
             get: {
                 authMe: '/accounts/auth/me',
                 listTemplates: '/projects/templates/?page|itemsPerPage',
-                listProjects: '/projects/?page|itemsPerPage',
+                listProjects: '/projects/?page|itemsPerPage|title',
                 listProject: '/projects/${projectId}',
                 generateProjectCover: '/projects/${projectId}/screenshot',
                 listBlocks: '/projects/${projectId}/blocks',
@@ -216,8 +216,17 @@ class Client {
         return this._request('POST', 'createProjectFromTemplateAsync', { templateId });
     }
 
-    listProjects(page = 1, itemsPerPage = 6) {
-        return this._request('GET', 'listProjectsAsync', { page, itemsPerPage });
+    listProjects(page = 1, itemsPerPage = 6, title = null) {
+        const query = {
+            page,
+            itemsPerPage
+        };
+
+        if (title) {
+            query['title'] = title;
+        }
+
+        return this._request('GET', 'listProjectsAsync', query);
     }
 
     listProject(projectId) {

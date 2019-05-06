@@ -185,6 +185,135 @@ describe('Api Responses', function() {
                     }`);
                 });
             });
+
+            it('should list user projects paginated in a specific page', async function() {
+                const client = await getAuthenticatedTestClient();
+                const response = await client.listProjects(2, 3);
+
+                const responseBody = response.json;
+                const projects = responseBody.items;
+
+                expect(response.statusCode).to.equal(200);
+                expect(responseBody).to.matchPattern(`{
+                    "items": Array,
+                    "totalItems": Number,
+                    "page": Number,
+                    "limit": Number,
+                    "pages": Number,
+                    "defaultCover": String,
+                }`);
+                expect(responseBody.page).to.equal(2);
+                expect(responseBody.limit).to.equal(3);
+                projects.forEach(project => {
+                    expect(project).to.matchPattern(`{
+                        "_id": String,
+                        "title": String,
+                        "fonts": Array,
+                        "publish": Boolean,
+                        "secure": Boolean,
+                        "countViews": Number,
+                        "timeViews": Number,
+                        "priority": Number,
+                        "blocks": Array,
+                        "userId": String,
+                        "accountId": String,
+                        "token": String,
+                        "slug": String,
+                        "publishURL": String,
+                        "createdAt": String,
+                        "updatedAt": String,
+                        "__v": Number,
+                        "password"?: String OR null,
+                        "lastView"?: String,
+                    }`);
+                });
+            });
+
+            it('should list user projects paginated with a specific quantity of items per page', async function() {
+                const client = await getAuthenticatedTestClient();
+                const response = await client.listProjects(2);
+
+                const responseBody = response.json;
+                const projects = responseBody.items;
+
+                expect(response.statusCode).to.equal(200);
+                expect(responseBody).to.matchPattern(`{
+                    "items": Array,
+                    "totalItems": Number,
+                    "page": Number,
+                    "limit": Number,
+                    "pages": Number,
+                    "defaultCover": String,
+                }`);
+                expect(responseBody.page).to.equal(2);
+                projects.forEach(project => {
+                    expect(project).to.matchPattern(`{
+                        "_id": String,
+                        "title": String,
+                        "fonts": Array,
+                        "publish": Boolean,
+                        "secure": Boolean,
+                        "countViews": Number,
+                        "timeViews": Number,
+                        "priority": Number,
+                        "blocks": Array,
+                        "userId": String,
+                        "accountId": String,
+                        "token": String,
+                        "slug": String,
+                        "publishURL": String,
+                        "createdAt": String,
+                        "updatedAt": String,
+                        "__v": Number,
+                        "password"?: String OR null,
+                        "lastView"?: String,
+                    }`);
+                });
+            });
+
+            it('should list user projects paginated with a specific title search', async function() {
+                const client = await getAuthenticatedTestClient();
+                const response = await client.listProjects(1, 6, 'Project title that does not exist');
+
+                const responseBody = response.json;
+                const projects = responseBody.items;
+
+                expect(response.statusCode).to.equal(200);
+                expect(responseBody).to.matchPattern(`{
+                    "items": Array,
+                    "totalItems": Number,
+                    "page": Number,
+                    "limit": Number,
+                    "pages": Number,
+                    "defaultCover": String,
+                }`);
+                expect(responseBody.page).to.equal(1);
+                expect(responseBody.limit).to.equal(6);
+                expect(responseBody.items.length).to.equal(0);
+                projects.forEach(project => {
+                    expect(project).to.matchPattern(`{
+                        "_id": String,
+                        "title": String,
+                        "fonts": Array,
+                        "publish": Boolean,
+                        "secure": Boolean,
+                        "countViews": Number,
+                        "timeViews": Number,
+                        "priority": Number,
+                        "blocks": Array,
+                        "userId": String,
+                        "accountId": String,
+                        "token": String,
+                        "slug": String,
+                        "publishURL": String,
+                        "createdAt": String,
+                        "updatedAt": String,
+                        "__v": Number,
+                        "password"?: String OR null,
+                        "lastView"?: String,
+                    }`);
+                });
+            });
         });
 
         describe('Retrieve', function() {
@@ -1099,6 +1228,7 @@ describe('Api Responses', function() {
                     columnId,
                     testContentId,
                     {
+                        type: 'text',
                         data: {
                             json: {
                                 type: 'doc',

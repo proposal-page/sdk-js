@@ -1,6 +1,6 @@
 {
   "name": "@proposal-page/proposal-page-sdk",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "This module is a open source project with the goal of making the task of consuming the Proposal Page API easy and straight-forward",
   "main": "bin/index.js",
   "license": "MIT",
