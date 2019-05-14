@@ -1,0 +1,8 @@
+{
+    "_id": String,
+    "type": String,
+    "style": Object,
+    "data": Object,
+    "createdAt": String,
+    "updatedAt": String,
+}

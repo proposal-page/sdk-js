@@ -1,0 +1,8 @@
+{
+    "items": Array,
+    "totalItems": Number,
+    "page": Number,
+    "limit": Number,
+    "pages": Number,
+    "defaultCover": String,
+}

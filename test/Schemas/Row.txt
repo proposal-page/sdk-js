@@ -1,0 +1,7 @@
+{
+    "_id": String,
+    "description": String,
+    "columns": Array,
+    "createdAt": String,
+    "updatedAt": String,
+}

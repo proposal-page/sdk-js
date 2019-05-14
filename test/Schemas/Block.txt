@@ -1,0 +1,9 @@
+{
+    "_id": String,
+    "style": Object,
+    "fullScreen": Boolean,
+    "rows": Array,
+    "description": String,
+    "createdAt": String,
+    "updatedAt": String,
+}
