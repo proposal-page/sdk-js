@@ -2,6 +2,11 @@
 
 All notable changes to `proposal-page/sdk-js` will be documented in this file.
 
+## 0.4.0 - 2019-05-14
+- added the `acceptProject` method to create a accept intent for a project.
+- added the `confirmProjectAcceptance` method to confirm the accept intent for a project.
+- added the `revertProjectAcceptance` method to revert the acceptance of a project.
+
 ## 0.3.0 - 2019-05-06
 - added the optional parameter `title` (default = null) to the listProjects method.
 - it's possible to list projects by title.

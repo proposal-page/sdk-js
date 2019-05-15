@@ -99,6 +99,9 @@ class Client {
                         },
                     },
                 },
+                acceptProject: '/projects/${projectId}/accept',
+                confirmProjectAcceptance: '/projects/accept/${acceptToken}',
+                revertProjectAcceptance: '/projects/revert-accept/${acceptReversionToken}'
             },
             put: {
                 updateProject: '/projects/${projectId}',
@@ -267,6 +270,18 @@ class Client {
 
     viewProjectAndNotify(projectId) {
         return this._request('PUT', 'viewProjectAndNotifyAsync', { projectId });
+    }
+
+    acceptProject(projectId) {
+        return this._request('POST', 'acceptProjectAsync', { projectId });
+    }
+
+    confirmProjectAcceptance(acceptToken) {
+        return this._request('POST', 'confirmProjectAcceptanceAsync', { acceptToken });
+    }
+
+    revertProjectAcceptance(acceptReversionToken) {
+        return this._request('POST', 'revertProjectAcceptanceAsync', { acceptReversionToken });
     }
 
     // Blocks

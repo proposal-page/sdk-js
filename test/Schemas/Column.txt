@@ -1,0 +1,7 @@
+{
+    "_id": String,
+    "contents": Array,
+    "size": Number,
+    "createdAt": String,
+    "updatedAt": String,
+}

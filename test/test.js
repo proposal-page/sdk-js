@@ -4,6 +4,15 @@ const jsonPattern = require('chai-json-pattern');
 const sinon = require('sinon');
 const { Client: SDKClient } = require('../bin/index');
 
+const {
+    projectSchema,
+    blockSchema,
+    rowSchema,
+    columnSchema,
+    contentSchema,
+    paginatedProjectSchema
+} = require('./Schemas');
+
 chai.use(jsonPattern.default);
 
 // Test clients setup
@@ -118,25 +127,7 @@ describe('Api Responses', function() {
                 const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(201);
-                expect(responseBody).to.matchPattern(`{
-                    "_id": String,
-                    "title": String,
-                    "fonts": Array,
-                    "publish": Boolean,
-                    "secure": Boolean,
-                    "countViews": Number,
-                    "timeViews": Number,
-                    "priority": Number,
-                    "blocks": Array,
-                    "userId": String,
-                    "accountId": String,
-                    "token": String,
-                    "slug": String,
-                    "publishURL": String,
-                    "createdAt": String,
-                    "updatedAt": String,
-                    "__v": Number,
-                }`);
+                expect(responseBody).to.matchPattern(projectSchema);
                 expect(responseBody.title).to.equal('New Project');
                 expect(responseBody.blocks).to.be.empty;
 
@@ -153,36 +144,9 @@ describe('Api Responses', function() {
                 const projects = responseBody.items;
 
                 expect(response.statusCode).to.equal(200);
-                expect(responseBody).to.matchPattern(`{
-                    "items": Array,
-                    "totalItems": Number,
-                    "page": Number,
-                    "limit": Number,
-                    "pages": Number,
-                    "defaultCover": String,
-                }`);
+                expect(responseBody).to.matchPattern(paginatedProjectSchema);
                 projects.forEach(project => {
-                    expect(project).to.matchPattern(`{
-                        "_id": String,
-                        "title": String,
-                        "fonts": Array,
-                        "publish": Boolean,
-                        "secure": Boolean,
-                        "countViews": Number,
-                        "timeViews": Number,
-                        "priority": Number,
-                        "blocks": Array,
-                        "userId": String,
-                        "accountId": String,
-                        "token": String,
-                        "slug": String,
-                        "publishURL": String,
-                        "createdAt": String,
-                        "updatedAt": String,
-                        "__v": Number,
-                        "password"?: String OR null,
-                        "lastView"?: String,
-                    }`);
+                    expect(project).to.matchPattern(projectSchema);
                 });
             });
 
@@ -194,38 +158,11 @@ describe('Api Responses', function() {
                 const projects = responseBody.items;
 
                 expect(response.statusCode).to.equal(200);
-                expect(responseBody).to.matchPattern(`{
-                    "items": Array,
-                    "totalItems": Number,
-                    "page": Number,
-                    "limit": Number,
-                    "pages": Number,
-                    "defaultCover": String,
-                }`);
+                expect(responseBody).to.matchPattern(paginatedProjectSchema);
                 expect(responseBody.page).to.equal(2);
                 expect(responseBody.limit).to.equal(3);
                 projects.forEach(project => {
-                    expect(project).to.matchPattern(`{
-                        "_id": String,
-                        "title": String,
-                        "fonts": Array,
-                        "publish": Boolean,
-                        "secure": Boolean,
-                        "countViews": Number,
-                        "timeViews": Number,
-                        "priority": Number,
-                        "blocks": Array,
-                        "userId": String,
-                        "accountId": String,
-                        "token": String,
-                        "slug": String,
-                        "publishURL": String,
-                        "createdAt": String,
-                        "updatedAt": String,
-                        "__v": Number,
-                        "password"?: String OR null,
-                        "lastView"?: String,
-                    }`);
+                    expect(project).to.matchPattern(projectSchema);
                 });
             });
 
@@ -237,37 +174,10 @@ describe('Api Responses', function() {
                 const projects = responseBody.items;
 
                 expect(response.statusCode).to.equal(200);
-                expect(responseBody).to.matchPattern(`{
-                    "items": Array,
-                    "totalItems": Number,
-                    "page": Number,
-                    "limit": Number,
-                    "pages": Number,
-                    "defaultCover": String,
-                }`);
+                expect(responseBody).to.matchPattern(paginatedProjectSchema);
                 expect(responseBody.page).to.equal(2);
                 projects.forEach(project => {
-                    expect(project).to.matchPattern(`{
-                        "_id": String,
-                        "title": String,
-                        "fonts": Array,
-                        "publish": Boolean,
-                        "secure": Boolean,
-                        "countViews": Number,
-                        "timeViews": Number,
-                        "priority": Number,
-                        "blocks": Array,
-                        "userId": String,
-                        "accountId": String,
-                        "token": String,
-                        "slug": String,
-                        "publishURL": String,
-                        "createdAt": String,
-                        "updatedAt": String,
-                        "__v": Number,
-                        "password"?: String OR null,
-                        "lastView"?: String,
-                    }`);
+                    expect(project).to.matchPattern(projectSchema);
                 });
             });
 
@@ -322,27 +232,7 @@ describe('Api Responses', function() {
                 const response = await client.listProject(testProjectId);
 
                 expect(response.statusCode).to.equal(200);
-                expect(response.json).to.matchPattern(`{
-                    "_id": String,
-                    "title": String,
-                    "fonts": Array,
-                    "publish": Boolean,
-                    "secure": Boolean,
-                    "countViews": Number,
-                    "timeViews": Number,
-                    "priority": Number,
-                    "blocks": Array,
-                    "userId": String,
-                    "accountId": String,
-                    "token": String,
-                    "slug": String,
-                    "publishURL": String,
-                    "createdAt": String,
-                    "updatedAt": String,
-                    "__v": Number,
-                    "password"?: String OR null,
-                    "lastView"?: String,
-                }`);
+                expect(response.json).to.matchPattern(projectSchema);
             });
         });
 
@@ -356,25 +246,7 @@ describe('Api Responses', function() {
                 const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(200);
-                expect(responseBody).to.matchPattern(`{
-                    "_id": String,
-                    "title": String,
-                    "fonts": Array,
-                    "publish": Boolean,
-                    "secure": Boolean,
-                    "countViews": Number,
-                    "timeViews": Number,
-                    "priority": Number,
-                    "blocks": Array,
-                    "userId": String,
-                    "accountId": String,
-                    "token": String,
-                    "slug": String,
-                    "publishURL": String,
-                    "createdAt": String,
-                    "updatedAt": String,
-                    "__v": Number,
-                }`);
+                expect(responseBody).to.matchPattern(projectSchema);
                 expect(responseBody.title).to.equal('Updated Project Title');
             });
         });
@@ -387,26 +259,7 @@ describe('Api Responses', function() {
                 const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(200);
-                expect(responseBody).to.matchPattern(`{
-                    "_id": String,
-                    "title": String,
-                    "fonts": Array,
-                    "publish": Boolean,
-                    "secure": Boolean,
-                    "countViews": Number,
-                    "timeViews": Number,
-                    "priority": Number,
-                    "blocks": Array,
-                    "userId": String,
-                    "accountId": String,
-                    "token": String,
-                    "slug": String,
-                    "publishURL": String,
-                    "createdAt": String,
-                    "updatedAt": String,
-                    "__v": Number,
-                    "password"?: String,
-                }`);
+                expect(responseBody).to.matchPattern(projectSchema);
                 expect(responseBody.title).to.equal('Updated Project Title');
                 expect(responseBody.blocks).to.be.empty;
             });
@@ -420,26 +273,7 @@ describe('Api Responses', function() {
                 const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(200);
-                expect(responseBody).to.matchPattern(`{
-                    "_id": String,
-                    "title": String,
-                    "fonts": Array,
-                    "publish": Boolean,
-                    "secure": Boolean,
-                    "countViews": Number,
-                    "timeViews": Number,
-                    "priority": Number,
-                    "blocks": Array,
-                    "userId": String,
-                    "accountId": String,
-                    "token": String,
-                    "slug": String,
-                    "publishURL": String,
-                    "createdAt": String,
-                    "updatedAt": String,
-                    "__v": Number,
-                    "password": String,
-                }`);
+                expect(responseBody).to.matchPattern(projectSchema);
                 expect(responseBody.password).to.equal('password');
             });
 
@@ -468,26 +302,7 @@ describe('Api Responses', function() {
                 const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(200);
-                expect(responseBody).to.matchPattern(`{
-                    "_id": String,
-                    "title": String,
-                    "fonts": Array,
-                    "publish": Boolean,
-                    "secure": Boolean,
-                    "countViews": Number,
-                    "timeViews": Number,
-                    "priority": Number,
-                    "blocks": Array,
-                    "userId": String,
-                    "accountId": String,
-                    "token": String,
-                    "slug": String,
-                    "publishURL": String,
-                    "createdAt": String,
-                    "updatedAt": String,
-                    "__v": Number,
-                    "password"?: String,
-                }`);
+                expect(responseBody).to.matchPattern(projectSchema);
                 expect(responseBody.publish).to.equal(true);
             });
         });
@@ -500,26 +315,7 @@ describe('Api Responses', function() {
                 const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(200);
-                expect(responseBody).to.matchPattern(`{
-                    "_id": String,
-                    "title": String,
-                    "fonts": Array,
-                    "publish": Boolean,
-                    "secure": Boolean,
-                    "countViews": Number,
-                    "timeViews": Number,
-                    "priority": Number,
-                    "blocks": Array,
-                    "userId": String,
-                    "accountId": String,
-                    "token": String,
-                    "slug": String,
-                    "publishURL": String,
-                    "createdAt": String,
-                    "updatedAt": String,
-                    "__v": Number,
-                    "password"?: String,
-                }`);
+                expect(responseBody).to.matchPattern(projectSchema);
                 expect(responseBody.secure).to.equal(true);
             });
         });
@@ -542,27 +338,36 @@ describe('Api Responses', function() {
                 const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(200);
-                expect(responseBody).to.matchPattern(`{
-                    "_id": String,
-                    "title": String,
-                    "fonts": Array,
-                    "publish": Boolean,
-                    "secure": Boolean,
-                    "countViews": Number,
-                    "timeViews": Number,
-                    "priority": Number,
-                    "blocks": Array,
-                    "userId": String,
-                    "accountId": String,
-                    "token": String,
-                    "slug": String,
-                    "publishURL": String,
-                    "createdAt": String,
-                    "updatedAt": String,
-                    "__v": Number,
-                    "password"?: any,
-                }`);
+                expect(responseBody).to.matchPattern(projectSchema);
             });
+        });
+
+        describe('Customer', function() {
+            it('should set a customer on the project', async function() {
+                const client = await getAuthenticatedTestClient();
+                const response = await client.updateProject(testProjectId, {
+                    customer: {
+                        name: 'Gianluca Bine',
+                        email: 'gian_bine@hotmail.com'
+                    }
+                });
+
+                const responseBody = response.json;
+
+                expect(response.statusCode).to.equal(200);
+                expect(responseBody).to.matchPattern(projectSchema);
+                expect(responseBody.customer.name).to.equal('Gianluca Bine');
+                expect(responseBody.customer.email).to.equal('gian_bine@hotmail.com');
+            })
+        });
+
+        describe('Accept', function() {
+            it('should send the confirm acceptance emails', async function() {
+                const client = await getAuthenticatedTestClient();
+                const response = await client.acceptProject(testProjectId);
+
+                expect(response.statusCode).to.equal(200);
+            })
         });
 
         describe('View and Notify', function() {
@@ -586,40 +391,9 @@ describe('Api Responses', function() {
                 const templates = responseBody.items;
 
                 expect(response.statusCode).to.equal(200);
-                expect(responseBody).to.matchPattern(`{
-                    "items": Array,
-                    "totalItems": Number,
-                    "page": Number,
-                    "limit": Number,
-                    "pages": Number,
-                    "defaultCover": String,
-                    "lastView"?: String,
-                }`);
+                expect(responseBody).to.matchPattern(paginatedProjectSchema);
                 templates.forEach(template => {
-                    expect(template).to.matchPattern(`{
-                        "_id": String,
-                        "title": String,
-                        "fonts": Array,
-                        "publish": Boolean,
-                        "secure": Boolean,
-                        "countViews": Number,
-                        "timeViews": Number,
-                        "priority": Number,
-                        "blocks": Array,
-                        "userId": String,
-                        "accountId": String,
-                        "token": String,
-                        "slug": String,
-                        "publishURL": String,
-                        "createdAt": String,
-                        "updatedAt": String,
-                        "__v": Number,
-                        "password"?: String OR null,
-                        "cover"?: String,
-                        "currency"?: String,
-                        "heating"?: Object,
-                        "lastView": String,
-                    }`);
+                    expect(template).to.matchPattern(projectSchema);
                 });
             });
         });
@@ -655,15 +429,7 @@ describe('Api Responses', function() {
 
                 expect(response.statusCode).to.equal(200);
                 blocks.forEach(block => {
-                    expect(block).to.matchPattern(`{
-                        "_id": String,
-                        "style": Object,
-                        "fullScreen": Boolean,
-                        "rows": Array,
-                        "description": String,
-                        "createdAt": String,
-                        "updatedAt": String,
-                    }`);
+                    expect(block).to.matchPattern(blockSchema);
                 });
             });
         });
@@ -680,15 +446,7 @@ describe('Api Responses', function() {
                 const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(201);
-                expect(responseBody).to.matchPattern(`{
-                    "_id": String,
-                    "style": Object,
-                    "fullScreen": Boolean,
-                    "rows": Array,
-                    "description": String,
-                    "createdAt": String,
-                    "updatedAt": String,
-                }`);
+                expect(responseBody).to.matchPattern(blockSchema);
                 expect(responseBody.description).to.equal('New Block');
 
                 testBlockId = responseBody._id;
@@ -706,15 +464,7 @@ describe('Api Responses', function() {
                 const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(200);
-                expect(responseBody).to.matchPattern(`{
-                    "_id": String,
-                    "style": Object,
-                    "fullScreen": Boolean,
-                    "rows": Array,
-                    "description": String,
-                    "createdAt": String,
-                    "updatedAt": String,
-                }`);
+                expect(responseBody).to.matchPattern(blockSchema);
             });
         });
 
@@ -731,15 +481,7 @@ describe('Api Responses', function() {
                 const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(200);
-                expect(responseBody).to.matchPattern(`{
-                    "_id": String,
-                    "style": Object,
-                    "fullScreen": Boolean,
-                    "rows": Array,
-                    "description": String,
-                    "createdAt": String,
-                    "updatedAt": String,
-                }`);
+                expect(responseBody).to.matchPattern(blockSchema);
                 expect(responseBody.description).to.equal('Updated Block Description');
             });
         });
@@ -754,15 +496,7 @@ describe('Api Responses', function() {
                 const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(200);
-                expect(responseBody).to.matchPattern(`{
-                    "_id": String,
-                    "style": Object,
-                    "fullScreen": Boolean,
-                    "rows": Array,
-                    "description": String,
-                    "createdAt": String,
-                    "updatedAt": String,
-                }`);
+                expect(responseBody).to.matchPattern(blockSchema);
             });
         });
 
@@ -776,15 +510,7 @@ describe('Api Responses', function() {
                 const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(200);
-                expect(responseBody).to.matchPattern(`{
-                    "_id": String,
-                    "style": Object,
-                    "fullScreen": Boolean,
-                    "rows": Array,
-                    "description": String,
-                    "createdAt": String,
-                    "updatedAt": String,
-                }`);
+                expect(responseBody).to.matchPattern(blockSchema);
             });
         });
 
@@ -798,15 +524,7 @@ describe('Api Responses', function() {
                 const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(201);
-                expect(responseBody).to.matchPattern(`{
-                    "_id": String,
-                    "style": Object,
-                    "fullScreen": Boolean,
-                    "rows": Array,
-                    "description": String,
-                    "createdAt": String,
-                    "updatedAt": String,
-                }`);
+                expect(responseBody).to.matchPattern(blockSchema);
             });
 
             it('should clone a project block and put it in a specific position', async function() {
@@ -818,15 +536,7 @@ describe('Api Responses', function() {
                 const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(201);
-                expect(responseBody).to.matchPattern(`{
-                    "_id": String,
-                    "style": Object,
-                    "fullScreen": Boolean,
-                    "rows": Array,
-                    "description": String,
-                    "createdAt": String,
-                    "updatedAt": String,
-                }`);
+                expect(responseBody).to.matchPattern(blockSchema);
             });
         });
 
@@ -856,13 +566,7 @@ describe('Api Responses', function() {
 
                 expect(response.statusCode).to.equal(200);
                 rows.forEach(row => {
-                    expect(row).to.matchPattern(`{
-                        "_id": String,
-                        "description": String,
-                        "columns": Array,
-                        "createdAt": String,
-                        "updatedAt": String,
-                    }`);
+                    expect(row).to.matchPattern(rowSchema);
                 });
             });
         });
@@ -879,13 +583,7 @@ describe('Api Responses', function() {
                 const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(201);
-                expect(responseBody).to.matchPattern(`{
-                    "_id": String,
-                    "description": String,
-                    "columns": Array,
-                    "createdAt": String,
-                    "updatedAt": String,
-                }`);
+                expect(responseBody).to.matchPattern(rowSchema);
                 expect(responseBody.description).to.equal('New row');
 
                 testRowId = responseBody._id;
@@ -902,13 +600,7 @@ describe('Api Responses', function() {
                 const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(200);
-                expect(responseBody).to.matchPattern(`{
-                    "_id": String,
-                    "description": String,
-                    "columns": Array,
-                    "createdAt": String,
-                    "updatedAt": String,
-                }`);
+                expect(responseBody).to.matchPattern(rowSchema);
             });
         });
 
@@ -924,13 +616,7 @@ describe('Api Responses', function() {
                 const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(200);
-                expect(responseBody).to.matchPattern(`{
-                "_id": String,
-                "description": String,
-                "columns": Array,
-                "createdAt": String,
-                "updatedAt": String,
-            }`);
+                expect(responseBody).to.matchPattern(rowSchema);
                 expect(responseBody.description).to.equal('Updated row description');
             });
         });
@@ -946,13 +632,7 @@ describe('Api Responses', function() {
                 const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(201);
-                expect(responseBody).to.matchPattern(`{
-                    "_id": String,
-                    "description": String,
-                    "columns": Array,
-                    "createdAt": String,
-                    "updatedAt": String,
-                }`);
+                expect(responseBody).to.matchPattern(rowSchema);
             });
 
             it('should clone project block row and put it in a specific position', async function() {
@@ -965,13 +645,7 @@ describe('Api Responses', function() {
                 const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(201);
-                expect(responseBody).to.matchPattern(`{
-                    "_id": String,
-                    "description": String,
-                    "columns": Array,
-                    "createdAt": String,
-                    "updatedAt": String,
-                }`);
+                expect(responseBody).to.matchPattern(rowSchema);
             });
         });
 
@@ -1003,13 +677,7 @@ describe('Api Responses', function() {
 
                 expect(response.statusCode).to.equal(200);
                 columns.forEach(column => {
-                    expect(column).to.matchPattern(`{
-                        "_id": String,
-                        "contents": Array,
-                        "size": Number,
-                        "createdAt": String,
-                        "updatedAt": String,
-                    }`);
+                    expect(column).to.matchPattern(columnSchema);
                 });
             });
         });
@@ -1028,13 +696,7 @@ describe('Api Responses', function() {
                 const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(201);
-                expect(responseBody).to.matchPattern(`{
-                    "_id": String,
-                    "contents": Array,
-                    "size": Number,
-                    "createdAt": String,
-                    "updatedAt": String,
-                }`);
+                expect(responseBody).to.matchPattern(columnSchema);
                 expect(responseBody.size).to.equal(12);
 
                 testColumnId = responseBody._id;
@@ -1052,13 +714,7 @@ describe('Api Responses', function() {
                 const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(200);
-                expect(responseBody).to.matchPattern(`{
-                    "_id": String,
-                    "contents": Array,
-                    "size": Number,
-                    "createdAt": String,
-                    "updatedAt": String,
-                }`);
+                expect(responseBody).to.matchPattern(columnSchema);
             });
         });
 
@@ -1081,13 +737,7 @@ describe('Api Responses', function() {
                 const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(200);
-                expect(responseBody).to.matchPattern(`{
-                    "_id": String,
-                    "contents": Array,
-                    "size": Number,
-                    "createdAt": String,
-                    "updatedAt": String,
-                }`);
+                expect(responseBody).to.matchPattern(columnSchema);
                 expect(responseBody.size).to.equal(11);
             });
         });
@@ -1122,14 +772,7 @@ describe('Api Responses', function() {
 
                 expect(response.statusCode).to.equal(200);
                 contents.forEach(content => {
-                    expect(content).to.matchPattern(`{
-                        "_id": String,
-                        "type": String,
-                        "style": Object,
-                        "data": Object,
-                        "createdAt": String,
-                        "updatedAt": String,
-                    }`);
+                    expect(content).to.matchPattern(contentSchema);
                 });
             });
         });
@@ -1172,14 +815,7 @@ describe('Api Responses', function() {
                 const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(201);
-                expect(responseBody).to.matchPattern(`{
-                    "_id": String,
-                    "type": String,
-                    "style": Object,
-                    "data": Object,
-                    "createdAt": String,
-                    "updatedAt": String,
-                }`);
+                expect(responseBody).to.matchPattern(contentSchema);
 
                 testContentId = responseBody._id;
             });
@@ -1203,14 +839,7 @@ describe('Api Responses', function() {
                 const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(200);
-                expect(responseBody).to.matchPattern(`{
-                    "_id": String,
-                    "type": String,
-                    "style": Object,
-                    "data": Object,
-                    "createdAt": String,
-                    "updatedAt": String,
-                }`);
+                expect(responseBody).to.matchPattern(contentSchema);
             });
         });
 
@@ -1252,14 +881,7 @@ describe('Api Responses', function() {
                 const responseBody = response.json;
 
                 expect(response.statusCode).to.equal(200);
-                expect(responseBody).to.matchPattern(`{
-                    "_id": String,
-                    "type": String,
-                    "style": Object,
-                    "data": Object,
-                    "createdAt": String,
-                    "updatedAt": String,
-                }`);
+                expect(responseBody).to.matchPattern(contentSchema);
             });
         });
 
